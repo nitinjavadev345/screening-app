@@ -44,12 +44,14 @@ public class ScreeningService {
 
     Map<String, EligibilityResult> res = new HashMap<>();
 
-    double total = members.stream().mapToDouble(m -> m.income).sum();
+    // Assuming all income values are MONTHLY
+    double totalMonthlyIncome = members.stream().mapToDouble(m -> m.income)
+    .sum();
     int size = members.size();
-    double avg = total / size;
+    double avg = totalMonthlyIncome / size;
 
     // Food Program
-    if (total <= 40000) {
+    if (totalMonthlyIncome <= 40000) {
         res.put("Food", new EligibilityResult(true,
             "Your total household income is within the allowed limit."));
     } else {
