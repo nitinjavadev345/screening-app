@@ -236,13 +236,20 @@ npm start
 
 ## 📸 Screenshots
 
-* Screening Wizard
-* <img width="588" height="409" alt="image" src="https://github.com/user-attachments/assets/11ea07c4-c6d4-4da1-8051-40d003247a3a" />
+### Household Information
+![Household](frontend/public/screenshots/household.png)
 
-* Members Page
-* Income Page
-* Review Screen
-* Eligibility Results
+### Members Details
+![Members](frontend/public/screenshots/members.png)
+
+### Income Details
+![Income](frontend/public/screenshots/income.png)
+
+### Review Screen
+![Review](frontend/public/screenshots/review.png)
+
+### Eligibility Results
+![Results](frontend/public/screenshots/results.png)
 
 ---
 
