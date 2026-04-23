@@ -237,19 +237,19 @@ npm start
 ## 📸 Screenshots
 
 ### Household Information
-![Household](frontend/public/screenshots/household.png)
+![Household](frontend/public/screenshots/household.jpg)
 
 ### Members Details
-![Members](frontend/public/screenshots/members.png)
+![Members](frontend/public/screenshots/members.jpg)
 
 ### Income Details
-![Income](frontend/public/screenshots/income.png)
+![Income](frontend/public/screenshots/income.jpg)
 
 ### Review Screen
-![Review](frontend/public/screenshots/review.png)
+![Review](frontend/public/screenshots/review.jpg)
 
 ### Eligibility Results
-![Results](frontend/public/screenshots/results.png)
+![Results](frontend/public/screenshots/results.jpg)
 
 ---
 
