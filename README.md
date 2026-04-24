@@ -23,9 +23,11 @@ This project implements an end-to-end **Screening → Eligibility → Intake flo
 
 ### 🧭 Multi-Step Intelligent Screening (IEG-style)
 
-* Guided wizard with conditional navigation
-* Skips irrelevant pages dynamically
-* Real-time data capture using React Context
+- Guided wizard with step progress indicator
+- Conditional navigation
+- Review before submission
+- Real-time data capture using React Context
+
 
 ### 👨‍👩‍👧 Household Modeling
 
@@ -44,7 +46,45 @@ Evaluates eligibility for:
 Includes:
 
 * Household-level and individual-level rules
-* Reason-based eligibility explanations (not just boolean results)
+* Transparent reason-based outcomes.
+
+
+## 🧠 AI Features (NEW)
+
+Integrated with **Ollama + Phi-3** local LLM.
+
+Generates structured summaries such as:
+
+- Approved Programs
+- Denied Programs
+- Reasons for decisions
+- Recommended next steps
+
+### Example Output
+
+- Approved Programs:
+  - Food
+  - Pension
+
+- Denied Programs:
+  - Healthcare
+
+- Reasons:
+  - Household income within threshold
+  - Senior household member present
+
+- Next Steps:
+  - Apply for approved programs
+  - Review denial criteria
+
+### Why This Matters
+
+Demonstrates:
+
+- AI integration in enterprise systems
+- Prompt engineering
+- Privacy-friendly local LLM architecture
+- Human-readable decisions
 
 ---
 
@@ -56,7 +96,7 @@ Includes:
 
 ---
 
-### 📊 Cúram-Inspired UX
+### 📊 Public Sectore UX style
 
 * Section-based layout
 * Progress indicator across steps
@@ -68,63 +108,71 @@ Includes:
 ## 🏗️ Architecture
 
 ```
-React UI (Wizard)
-   ↓
+
+```text
+React Frontend (Wizard UI)
+        |
+        v
 Spring Boot REST APIs
-   ↓
-Service Layer (Eligibility Rules Engine)
-   ↓
-JPA / Hibernate
-   ↓
-H2 Database
+        |
+        v
+Eligibility Rules Engine
+        |
+   +----+----+
+   |         |
+   v         v
+H2 DB    AI Service
+            |
+            v
+      Ollama + Phi-3
+
 ```
 
 ---
 ## 🏗️ Architecture Diagram
 
-
-A[User Browser] --> B[React Frontend]
-B -->|REST API Calls| C[Spring Boot Backend]
-
-C --> D[ScreeningController]
-D --> E[ScreeningService]
-E --> F[Eligibility Logic]
-
-E --> G[ScreeningRepository]
-G --> H[(H2 Database)]
++----------------------+
+|   User Browser       |
+|   React Frontend     |
++----------+-----------+
+           |
+           | REST Calls
+           v
++----------------------+
+| Spring Boot Backend  |
+| Controllers + APIs   |
++----------+-----------+
+           |
+           v
++----------------------+
+| Screening Service    |
+| Rules Engine         |
++-----+-----------+----+
+      |           |
+      v           v
++---------+   +---------+
+|   H2 DB |   | Ollama  |
+| Storage |   | Phi-3   |
++---------+   +---------+
 
 ## 🔄 API Flow (Sequence Diagram)
-
-
-participant User
-participant ReactUI as React Frontend
-participant Controller as Spring Controller
-participant Service as ScreeningService
-participant DB as H2 Database
-
-User->>ReactUI: Fill screening form (wizard)
-ReactUI->>Controller: POST /screening (members JSON)
-
-Controller->>Service: save(json)
-Service->>DB: INSERT screening_data
-DB-->>Service: generated id
-Service-->>Controller: id
-Controller-->>ReactUI: return id
-
-ReactUI->>Controller: POST /application/{id}/apply
-
-Controller->>Service: evaluateEligibility(id)
-Service->>DB: SELECT json_data by id
-DB-->>Service: json
-
-Service->>Service: Parse JSON → MemberDTO
-Service->>Service: Apply eligibility rules
-
-Service-->>Controller: EligibilityResult (JSON)
-Controller-->>ReactUI: response
-
-ReactUI-->>User: Display eligibility results
-
+User completes wizard
+        |
+        v
+POST /screening
+        |
+Stores intake JSON
+        |
+Returns screeningId
+        |
+        v
+POST /screening/{id}/apply
+        |
+Eligibility rules executed
+        |
+AI summary generated
+        |
+Returns results + explanation
 
 ### 🔍 Flow Explanation
 
@@ -133,27 +181,42 @@ ReactUI-->>User: Display eligibility results
 3. Backend stores JSON in H2 database and returns an ID
 4. Frontend calls `/application/{id}/apply` to evaluate eligibility
 5. Backend processes rules and returns eligibility results
-6. UI displays program eligibility with reasons
+6. AI siummary is generated
+6. UI displays program eligibility with reasons and AI summary explanation.-
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 
-* React (Hooks, Context API)
-* Multi-step wizard pattern
-* Dynamic form handling
+React.js
+JavaScript
+Context API
+Multi-step Wizard Pattern
 
 ### Backend
 
-* Spring Boot 3
-* Spring Data JPA
-* RESTful APIs
+Java 17+
+Spring Boot
+Spring Web
+Spring Data JPA
+Hibernate
 
 ### Database
 
 * H2 (In-memory)
 * JPA Entities
 
+### AI Layer
+
+Ollama
+Phi-3
+
+### Tools
+   
+Git
+GitHub
+VS Code
+Maven
 ---
 
 ## 📂 Project Structure
@@ -197,8 +260,10 @@ screening-app/
 
 5. **Eligibility Results**
 
-   * Program-wise eligibility
-   * Detailed reasoning
+   * Program decisions
+   * Rule Explanations
+   * AI Summary
+
 
 ---
 
@@ -224,15 +289,32 @@ POST /screening
 
 ```
 POST /screening/{screeningId}/apply
-```
 
+
+```
+## 🤖 Ollama Setup
+
+1. Install Ollama
+   Download from:
+   https://ollama.com
+
+2. Pull Phi-3 Model
+   ollama pull phi3
+3. Start Ollama
+   ollama serve
+
+   Runs locally on:
+   http://localhost:11434
+4. Spring Boot Calls Local AI
+
+POST /api/generate
 ---
 
 ## 💾 Database
 
 ### Tables:
 
-* `screening_data` → stores JSON input
+* `screening_data` → stores screening payload
 * `person` → identity resolution
 
 ### Access H2 Console:
@@ -262,6 +344,9 @@ npm install
 npm start
 ```
 
+### AI
+
+ollama serve
 ---
 
 ## 🌐 URLs
@@ -269,6 +354,7 @@ npm start
 * Frontend → http://localhost:3000
 * Backend → http://localhost:8080
 * H2 Console → http://localhost:8080/h2-console
+* Ollama → http://localhost:11434
 
 ---
 
@@ -277,6 +363,8 @@ npm start
 * Used JSON storage for flexible screening schema
 * Ensured consistent field naming across UI → API → DB
 * Implemented idempotent identity resolution
+* AI layered separately from rules engine
+* Local-first privacy-friendly AI
 * Designed rule engine to be extensible for future programs
 
 ---
@@ -288,28 +376,31 @@ npm start
 * Add authentication (OAuth/JWT)
 * Deploy to cloud (AWS/GCP)
 * Replace H2 with PostgreSQL
-
+* Multilingual AI assistant
 ---
 
 ## 📸 Screenshots
 
 ### Household Information
+Household Information
 ![Household](frontend/public/screenshots/household.jpg)
 
 ### Members Details
+Members Details
 ![Members](frontend/public/screenshots/members.jpg)
 
 ### Income Details
+Income Details
 ![Income](frontend/public/screenshots/income.jpg)
 
 ### Review Screen
+Review Screen
 ![Review](frontend/public/screenshots/review.jpg)
 
 ### Eligibility Results
-<
+Eligibility Results
 ![Results](frontend/public/screenshots/result1.jpg)
-
-![Results](frontend/public/screenshots/result2.jpg)
+![Results](frontend/public/screenshots/result1.jpg)
 
 ---
 
@@ -318,13 +409,15 @@ npm start
 * Full-stack system design thinking
 * Real-world domain modeling (public benefits)
 * Clean API + UI contract design
+* AI integration in enterprise apps
 * Production-grade backend practices
 
 ---
 
 ## 👨‍💻 Author
 
-**Nitin Patil**
+**Nitin P**
+Java | Spring Boot | React | AI | Enterprise Systems
 
 ---
 
