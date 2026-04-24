@@ -1,6 +1,9 @@
-# 🏛️ Eligibility Screening & Intake System (Cúram-inspired)
 
-A full-stack, production-style eligibility screening system that simulates real-world government benefit platforms (similar to IBM Cúram), enabling citizens to assess eligibility across multiple programs through a dynamic, rule-driven workflow.
+## 🏛️ Eligibility Screening & Intake System
+
+A full-stack eligibility screening system inspired by enterprise social program management platforms.
+
+The application simulates real-world government benefit workflows, allowing users to determine eligibility across multiple programs using a dynamic, rule-driven process.
 
 ---
 
@@ -77,6 +80,64 @@ H2 Database
 ```
 
 ---
+## 🏗️ Architecture Diagram
+
+```mermaid
+flowchart LR
+
+A[User Browser] --> B[React Frontend]
+B -->|REST API Calls| C[Spring Boot Backend]
+
+C --> D[ScreeningController]
+D --> E[ScreeningService]
+E --> F[Eligibility Logic]
+
+E --> G[ScreeningRepository]
+G --> H[(H2 Database)]
+
+## 🔄 API Flow (Sequence Diagram)
+
+```mermaid
+sequenceDiagram
+
+participant User
+participant ReactUI as React Frontend
+participant Controller as Spring Controller
+participant Service as ScreeningService
+participant DB as H2 Database
+
+User->>ReactUI: Fill screening form (wizard)
+ReactUI->>Controller: POST /screening (members JSON)
+
+Controller->>Service: save(json)
+Service->>DB: INSERT screening_data
+DB-->>Service: generated id
+Service-->>Controller: id
+Controller-->>ReactUI: return id
+
+ReactUI->>Controller: POST /application/{id}/apply
+
+Controller->>Service: evaluateEligibility(id)
+Service->>DB: SELECT json_data by id
+DB-->>Service: json
+
+Service->>Service: Parse JSON → MemberDTO
+Service->>Service: Apply eligibility rules
+
+Service-->>Controller: EligibilityResult (JSON)
+Controller-->>ReactUI: response
+
+ReactUI-->>User: Display eligibility results
+
+
+### 🔍 Flow Explanation
+
+1. User enters household data through a multi-step React wizard
+2. Frontend submits data to `/screening` API
+3. Backend stores JSON in H2 database and returns an ID
+4. Frontend calls `/application/{id}/apply` to evaluate eligibility
+5. Backend processes rules and returns eligibility results
+6. UI displays program eligibility with reasons
 
 ## 🛠️ Tech Stack
 

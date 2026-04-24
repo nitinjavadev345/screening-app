@@ -17,6 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ScreeningService {
 
   @Autowired
+  private AiService aiService;
+
+  @Autowired
   private ScreeningRepository repo;
 
   @Autowired 
@@ -34,10 +37,10 @@ public class ScreeningService {
     return repo.findById(id).orElseThrow().getJsonData();
   }
 
-   public Map<String, EligibilityResult> evaluateEligibility(Long id) throws Exception {
+   public Map<String, Object> evaluateEligibility(Long id) throws Exception {
 
     String json = get(id);
-
+    System.out.println("*********************************json:"+json);
     List<MemberDTO> members =
       mapper.readValue(json,
         mapper.getTypeFactory().constructCollectionType(List.class, MemberDTO.class));
@@ -47,6 +50,9 @@ public class ScreeningService {
     // Assuming all income values are MONTHLY
     double totalMonthlyIncome = members.stream().mapToDouble(m -> m.income)
     .sum();
+
+    System.out.println("*********************************totalMonthlyIncome:"+totalMonthlyIncome);
+
     int size = members.size();
     double avg = totalMonthlyIncome / size;
 
@@ -79,6 +85,25 @@ public class ScreeningService {
             "No household member meets the age requirement (60+)."));
     }
 
-    return res;
+
+
+    Map<String, Object> finalResponse = new HashMap<>();
+    
+    String jsonText = mapper.writeValueAsString(res);
+    System.out.println("*********************************jsonText:"+jsonText);
+
+    String aiText = aiService.explainEligibility(jsonText);
+    //String aiText = aiService.explainEligibility("Food eligible. Pension denied.");
+    //System.out.println(aiText);
+
+    
+    System.out.println("*********************************aiText:"+aiText);
+
+    finalResponse.put("results", res);
+    finalResponse.put("aiExplanation", aiText);
+
+    System.out.println("*********************************finalResponse:"+finalResponse);
+    return finalResponse;
+    
   }
 }
