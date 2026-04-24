@@ -129,8 +129,7 @@ H2 DB    AI Service
 ```
 
 ---
-## 🏗️ Architecture Diagram
-
+## 🏗️ Detailed Architecture Diagram
 +----------------------+
 |   User Browser       |
 |   React Frontend     |
@@ -382,23 +381,29 @@ ollama serve
 ## 📸 Screenshots
 
 ### Household Information
-Household Information
+
+## 🏠 Household Information
 ![Household](frontend/public/screenshots/household.jpg)
 
 ### Members Details
-Members Details
+
+## 👨‍👩‍👧‍👦 Member Details
+
 ![Members](frontend/public/screenshots/members.jpg)
 
 ### Income Details
-Income Details
+
+## 💰 Income Details
 ![Income](frontend/public/screenshots/income.jpg)
 
 ### Review Screen
-Review Screen
+
+## 📝 Review Screen
 ![Review](frontend/public/screenshots/review.jpg)
 
 ### Eligibility Results
-Eligibility Results
+
+## ✅ Eligibility Results
 ![Results](frontend/public/screenshots/result1.jpg)
 ![Results](frontend/public/screenshots/result1.jpg)
 
