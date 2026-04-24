@@ -82,8 +82,6 @@ H2 Database
 ---
 ## 🏗️ Architecture Diagram
 
-```mermaid
-flowchart LR
 
 A[User Browser] --> B[React Frontend]
 B -->|REST API Calls| C[Spring Boot Backend]
@@ -97,8 +95,6 @@ G --> H[(H2 Database)]
 
 ## 🔄 API Flow (Sequence Diagram)
 
-```mermaid
-sequenceDiagram
 
 participant User
 participant ReactUI as React Frontend
