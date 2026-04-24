@@ -306,7 +306,7 @@ POST /screening/{screeningId}/apply
    http://localhost:11434
 4. Spring Boot Calls Local AI
    POST /api/generate
-   
+
 ---
 
 ## 💾 Database
@@ -398,7 +398,7 @@ ollama serve
 
 ## ✅ Eligibility Results
 ![Results](frontend/public/screenshots/result1.jpg)
-![Results](frontend/public/screenshots/result1.jpg)
+![Results](frontend/public/screenshots/result2.jpg)
 
 ---
 
