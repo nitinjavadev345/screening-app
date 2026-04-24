@@ -310,6 +310,7 @@ npm start
 ![Review](frontend/public/screenshots/review.jpg)
 
 ### Eligibility Results
+<
 ![Results](frontend/public/screenshots/result1.jpg)
 
 ![Results](frontend/public/screenshots/result2.jpg)
