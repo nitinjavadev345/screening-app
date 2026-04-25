@@ -1,9 +1,320 @@
 
-## 🏛️ Eligibility Screening & Intake System
 
-A full-stack eligibility screening system inspired by enterprise social program management platforms.
+## 🏛️ Eligibility Screening & Intake Platform
 
-The application simulates real-world government benefit workflows, allowing users to determine eligibility across multiple programs using a dynamic, rule-driven process.
+A production-style full-stack application that simulates how public benefits and assistance programs evaluate household eligibility through a guided digital intake process.
+
+Built to demonstrate modern enterprise engineering practices across frontend UX, backend APIs, decision engines, data modeling, and privacy-friendly AI integration.
+
+---
+
+# ✨ Highlights
+
+* End-to-end **Screening → Eligibility → Intake** workflow
+* Dynamic multi-step guided application experience
+* Rule-based eligibility decision engine
+* Idempotent and resilient REST APIs
+* Local AI summaries using Ollama + Microsoft Phi-3
+* Modular architecture designed for future program expansion
+* Fast local development using H2 in-memory database
+
+---
+
+# 📌 Problem Statement
+
+Many benefits systems require applicants to navigate complex forms, unclear requirements, and fragmented workflows.
+
+This project demonstrates how a modern digital platform can simplify that journey by:
+
+* Collecting household data through a guided wizard
+* Evaluating multiple assistance programs in one submission
+* Explaining decisions with transparent reasoning
+* Generating human-readable next steps using AI
+
+---
+
+# 🧩 Core Features
+
+## 1. Guided Multi-Step Application Flow
+
+A responsive React-based wizard that walks users through each stage of the application.
+
+### Includes:
+
+* Progress indicator
+* Context-aware navigation
+* Review before submission
+* Real-time state management using Context API
+* Clean sectioned user experience
+
+---
+
+## 2. Household & Applicant Modeling
+
+Supports real-world intake scenarios involving multiple household members.
+
+### Captures:
+
+* Household size
+* Individual age
+* Income per member
+* Aggregate household calculations
+
+---
+
+## 3. Rules-Based Eligibility Engine
+
+Backend decision service evaluates eligibility across programs such as:
+
+* 🍽️ Food Assistance
+* 🏥 Healthcare Support
+* 👴 Senior Benefits
+
+### Decision Logic Supports:
+
+* Household-level thresholds
+* Individual-level criteria
+* Reason codes / explanations
+* Deterministic outcomes
+
+---
+
+## 4. AI Decision Summaries
+
+Integrated with locally hosted LLM infrastructure using Ollama + Phi-3.
+
+Generates structured summaries including:
+
+* Approved programs
+* Denied programs
+* Why decisions occurred
+* Recommended next steps
+
+### Why It Matters
+
+* Improves explainability
+* Reduces user confusion
+* Demonstrates enterprise AI integration
+* Preserves privacy via local inference
+
+---
+
+## 5. Production-Oriented Backend Design
+
+### Implemented Practices:
+
+* Idempotent create flows
+* Duplicate prevention
+* Validation layers
+* Separation of concerns
+* Retry-safe request handling
+* Clean service/controller architecture
+
+---
+
+# 🏗️ System Architecture
+
+```text
+┌──────────────────────────┐
+│      React Frontend      │
+│   Guided Intake Wizard   │
+└────────────┬─────────────┘
+             │ REST APIs
+             ▼
+┌──────────────────────────┐
+│   Spring Boot Backend    │
+│ Controllers + Services   │
+└────────────┬─────────────┘
+             ▼
+┌──────────────────────────┐
+│ Eligibility Rules Engine │
+└───────┬───────────┬──────┘
+        │           │
+        ▼           ▼
+┌──────────────┐   ┌──────────────┐
+│    H2 DB     │   │  AI Service  │
+│ Persistence  │   │ Ollama/Phi-3 │
+└──────────────┘   └──────────────┘
+```
+
+---
+
+# 🔄 Request Flow
+
+```text
+User completes wizard
+        ↓
+POST /screening
+        ↓
+Persist intake payload
+        ↓
+Return screeningId
+        ↓
+POST /screening/{id}/apply
+        ↓
+Execute eligibility rules
+        ↓
+Generate AI summary
+        ↓
+Return results + explanation
+```
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
+
+* Meta React
+* JavaScript
+* Context API
+* Component-driven architecture
+
+## Backend
+
+* Java 17+
+* VMware Spring Boot
+* Spring Web
+* Spring Data JPA
+* Hibernate
+
+## Database
+
+* H2 In-Memory Database
+
+## AI Layer
+
+* Ollama Ollama
+* Phi-3
+
+## Tooling
+
+* GitHub GitHub
+* Git
+* Maven
+* VS Code
+
+---
+
+# 📂 Project Structure
+
+```text
+screening-app/
+├── backend/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── model/
+│   └── config/
+│
+└── frontend/
+    ├── components/
+    ├── context/
+    ├── steps/
+    └── App.js
+```
+
+---
+
+# 🧪 Sample Eligibility Rules
+
+| Program            | Rule                    |
+| ------------------ | ----------------------- |
+| Food Assistance    | Total income ≤ 40,000   |
+| Healthcare Support | Average income ≤ 15,000 |
+| Senior Benefits    | Any member age ≥ 60     |
+
+---
+
+# 🚀 Running Locally
+
+## Backend
+
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+## Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## AI Service
+
+```bash
+ollama serve
+ollama pull phi3
+```
+
+---
+
+# 🌐 Local URLs
+
+* Frontend: `http://localhost:3000`
+* Backend: `http://localhost:8080`
+* H2 Console: `http://localhost:8080/h2-console`
+* Ollama: `http://localhost:11434`
+
+---
+
+# 🔐 API Endpoints
+
+```text
+POST /screening
+POST /screening/{screeningId}/apply
+```
+
+---
+
+# 📈 Engineering Decisions
+
+* JSON payload storage for flexible intake schemas
+* Local-first AI for privacy-conscious architecture
+* Rules engine separated from AI summarization
+* Expandable program model for future benefits
+* Lightweight dev setup optimized for rapid iteration
+
+---
+
+# 🚧 Future Enhancements
+
+* Authentication (JWT / OAuth2)
+* PostgreSQL migration
+* Rules engine integration (Drools / DSL)
+* Document upload & verification
+* Admin caseworker dashboard
+* Cloud deployment (AWS / GCP / Azure)
+* Multilingual AI assistant
+
+---
+
+# 💡 What This Project Demonstrates
+
+* Full-stack software engineering
+* API contract design
+* Workflow automation systems
+* Decision engine architecture
+* Human-centered UX design
+* Practical AI integration
+* Enterprise scalability thinking
+
+---
+
+# 👨‍💻 Author
+
+**Nitin P**
+Java • Spring Boot • React • AI • Enterprise Systems
+
+---
+
+# ⭐ Support
+
+If you found this project valuable, consider starring the repository.
+.
 
 ---
 
@@ -15,19 +326,18 @@ This project implements an end-to-end **Screening → Eligibility → Intake flo
 * Rule-based eligibility engine (Spring Boot)
 * Idempotent backend APIs
 * H2 in-memory database for rapid prototyping
-* Cúram-style guided user experience
+* Guided step-by-step user experience
 
 ---
 
 ## 🧩 Key Features
 
-### 🧭 Multi-Step Intelligent Screening (IEG-style)
+### 🧭 Multi-Step Intelligent Screening
 
 - Guided wizard with step progress indicator
 - Conditional navigation
 - Review before submission
 - Real-time data capture using React Context
-
 
 ### 👨‍👩‍👧 Household Modeling
 
@@ -46,8 +356,9 @@ Evaluates eligibility for:
 Includes:
 
 * Household-level and individual-level rules
-* Transparent reason-based outcomes.
+* Transparent reason-based outcomes
 
+---
 
 ## 🧠 AI Features (NEW)
 
@@ -96,7 +407,7 @@ Demonstrates:
 
 ---
 
-### 📊 Public Sectore UX style
+### 📊 Guided Benefits Application UX
 
 * Section-based layout
 * Progress indicator across steps
@@ -106,8 +417,6 @@ Demonstrates:
 ---
 
 ## 🏗️ Architecture
-
-```
 
 ```text
 React Frontend (Wizard UI)
@@ -125,34 +434,39 @@ H2 DB    AI Service
             |
             v
       Ollama + Phi-3
-
 ```
 
 ---
+
 ## 🏗️ Detailed Architecture Diagram
-+----------------------+
-|   User Browser       |
-|   React Frontend     |
-+----------+-----------+
-           |
-           | REST Calls
-           v
-+----------------------+
-| Spring Boot Backend  |
-| Controllers + APIs   |
-+----------+-----------+
-           |
-           v
-+----------------------+
-| Screening Service    |
-| Rules Engine         |
-+-----+-----------+----+
-      |           |
-      v           v
-+---------+   +---------+
-|   H2 DB |   | Ollama  |
-| Storage |   | Phi-3   |
-+---------+   +---------+
+
+```text
+┌──────────────────────────┐
+│      User Browser        │
+│      React Frontend      │
+└────────────┬─────────────┘
+             │
+             │ REST Calls
+             ▼
+┌──────────────────────────┐
+│   Spring Boot Backend    │
+│   Controllers + APIs     │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│   Screening Service      │
+│   Rules Engine           │
+└───────┬───────────┬──────┘
+        │           │
+        ▼           ▼
+┌──────────────┐   ┌──────────────┐
+│    H2 DB     │   │   Ollama     │
+│   Storage    │   │    Phi-3     │
+└──────────────┘   └──────────────┘
+```
+
+
 
 ## 🔄 API Flow (Sequence Diagram)
 User completes wizard
@@ -178,10 +492,10 @@ Returns results + explanation
 1. User enters household data through a multi-step React wizard
 2. Frontend submits data to `/screening` API
 3. Backend stores JSON in H2 database and returns an ID
-4. Frontend calls `/application/{id}/apply` to evaluate eligibility
+4. Frontend calls `/screening/{id}/apply` to evaluate eligibility
 5. Backend processes rules and returns eligibility results
-6. AI siummary is generated
-6. UI displays program eligibility with reasons and AI summary explanation.-
+6. AI summary is generated
+7. UI displays program eligibility with reasons and AI summary explanation.-
 
 ## 🛠️ Tech Stack
 
